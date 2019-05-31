@@ -318,7 +318,7 @@ ui:
 
     # This should be a multi-line string mapping directly to the a map of
     # the annotations to configure some options depending on the Ingress controller
-    annotations: null
+    annotations: {}
 
 # syncCatalog will run the catalog sync process to sync K8S with Consul
 # services. This can run bidirectional (default) or unidirectionally (Consul
