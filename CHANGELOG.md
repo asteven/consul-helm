@@ -1,17 +1,44 @@
 ## UNRELEASED
 
+BUG FIXES:
+
+  * Fix enterprise license application when ACLs are turned off
+
+## 0.8.1 (May 9, 2019)
+
 IMPROVEMENTS:
 
-  * Support pod priority classes for Consul servers and clients
+  * Update default consul-k8s version to 0.8.1 for a central config bug fix
+
+## 0.8.0 (May 8, 2019)
+
+IMPROVEMENTS:
+
+  * Support adding a prefix to Kubernetes services registered in Consul [[GH 140](https://github.com/hashicorp/consul-helm/issues/140)]
+  * Support an option for automatically bootstrapping ACLs in a Consul cluster that is run fully in Kubernetes. If connectInject is enabled with this option on, this also automatically configures a new Kubernetes AuthMethod so that injected services are automatically granted ACL tokens based on their Kubernetes service account.
+  * Support central service configuration including proxy defaults in Connect (available in Consul 1.5+).
+  * Remove the `gossipEncryption.enabled` option and instead have the implementation based on the existence of the secretName and secretKey.
+
+## 0.7.0 (March 21, 2019)
+
+IMPROVEMENTS:
+
+  * Support pod PriorityClasses for Consul servers and clients
   * Add annotation and additional spec values for the UI service
   * Add liveness and readiness checks to the catalog sync pod [[consul-k8s GH 57](https://github.com/hashicorp/consul-k8s/issues/57)]
   * Support custom annotations for Consul clients and servers
   * Support PodSecurityPolicies for Consul components
   * Add service accounts and cluster roles/role bindings for each Consul component
+  * Add the namespace to the metadata volume name
+  * Support tolerations on Consul client and server pods
+  * Support gossip protocol encryption
+  * Allows custom environment variables for Consul client and server pods
+  * Support nodeSelectors for all components
   
 BUG FIXES:
 
   * Allow setting `extraConfig` variables using Helm's `--set` flag [[GH 74](https://github.com/hashicorp/consul-helm/issues/74)]
+  * Fix a formatting bug in the enterprise license command
 
 ## 0.6.0 (February 8, 2019)
 

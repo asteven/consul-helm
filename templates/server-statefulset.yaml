@@ -45,6 +45,10 @@ spec:
       affinity:
         {{ tpl .Values.server.affinity . | nindent 8 | trim }}
     {{- end }}
+    {{- if .Values.server.tolerations }}
+      tolerations:
+        {{ tpl .Values.server.tolerations . | nindent 8 | trim }}
+    {{- end }}
       terminationGracePeriodSeconds: 10
       serviceAccountName: {{ template "consul.fullname" . }}-server
       securityContext:
@@ -77,6 +81,14 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
+            {{- if (and .Values.global.gossipEncryption.secretName .Values.global.gossipEncryption.secretKey) }}
+            - name: GOSSIP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.global.gossipEncryption.secretName }}
+                  key: {{ .Values.global.gossipEncryption.secretKey }}
+            {{- end }}
+            {{- include "consul.extraEnvironmentVars" .Values.server | nindent 12 }}
           command:
             - "/bin/sh"
             - "-ec"
@@ -97,6 +109,9 @@ spec:
                 -datacenter={{ .Values.global.datacenter }} \
                 -data-dir=/consul/data \
                 -domain={{ .Values.global.domain }} \
+                {{- if (and .Values.global.gossipEncryption.secretName .Values.global.gossipEncryption.secretKey) }}
+                -encrypt="${GOSSIP_KEY}" \
+                {{- end }}
                 {{- if .Values.server.connect }}
                 -hcl="connect { enabled = true }" \
                 {{- end }}
@@ -108,7 +123,7 @@ spec:
                 {{- end }}
                 -server
           volumeMounts:
-            - name: data
+            - name: data-{{ .Release.Namespace }}
               mountPath: /consul/data
             - name: config
               mountPath: /consul/config
@@ -158,9 +173,13 @@ spec:
           resources:
             {{ tpl .Values.server.resources . | nindent 12 | trim }}
           {{- end }}
+      {{- if .Values.server.nodeSelector }}
+      nodeSelector:
+        {{ tpl .Values.server.nodeSelector . | indent 8 | trim }}
+      {{- end }}    
   volumeClaimTemplates:
     - metadata:
-        name: data
+        name: data-{{ .Release.Namespace }}
       spec:
         accessModes:
           - ReadWriteOnce

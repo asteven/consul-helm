@@ -9,11 +9,7 @@ be used as a full name.
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
 {{- $name := default .Chart.Name .Values.nameOverride -}}
-{{- if contains $name .Release.Name -}}
-{{- .Release.Name | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
 {{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
 {{- end -}}
 {{- end -}}
 
@@ -48,6 +44,18 @@ Add a special case for replicas=1, where it should default to 0 as well.
 {{- 1 -}}
 {{- else -}}
 {{- sub (div (int .Values.server.replicas) 2) 1 -}}
+{{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Inject extra environment vars in the format key:value, if populated
+*/}}
+{{- define "consul.extraEnvironmentVars" -}}
+{{- if .extraEnvironmentVars -}}
+{{- range $key, $value := .extraEnvironmentVars }}
+- name: {{ $key }}
+  value: {{ $value | quote }}
 {{- end -}}
 {{- end -}}
 {{- end -}}
