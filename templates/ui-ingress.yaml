@@ -22,7 +22,11 @@ spec:
         paths:
           - backend:
               serviceName: {{ $serviceName }}
+              {{- if .Values.global.tls.enabled }}
+              servicePort: 443
+              {{- else }}
               servicePort: 80
+              {{- end }}
   {{- end -}}
   {{- if .Values.ui.ingress.tls }}
   tls:
