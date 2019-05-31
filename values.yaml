@@ -191,7 +191,7 @@ server:
   # Extra annotations to attach to the server pods
   # This should be a multi-line string mapping directly to the a map of
   # the annotations to apply to the server pods
-  annotations: null
+  annotations: {}
 
   # extraEnvVars is a list of extra enviroment variables to set with the stateful set. These could be
   # used to include proxy settings required for cloud auto-join feature, 
@@ -256,7 +256,7 @@ client:
   # Extra annotations to attach to the client pods
   # This should be a multi-line string mapping directly to the a map of
   # the annotations to apply to the client pods
-  annotations: null
+  annotations: {}
 
   # extraEnvVars is a list of extra enviroment variables to set with the pod. These could be
   # used to include proxy settings required for cloud auto-join feature, 
@@ -293,7 +293,7 @@ ui:
     type: null
     # This should be a multi-line string mapping directly to the a map of
     # the annotations to apply to the UI service
-    annotations: null
+    annotations: {}
     # Additional ServiceSpec values
     # This should be a multi-line string mapping directly to a Kubernetes
     # ServiceSpec object.
