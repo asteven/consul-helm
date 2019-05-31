@@ -1,6 +1,5 @@
 {{- if .Values.ui.ingress.enabled }}
 {{- $serviceName := printf "%s-%s" (include "consul.fullname" .) "ui" -}}
-{{- $tlsEnabled := .Values.global.tls.enabled -}}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
@@ -23,11 +22,7 @@ spec:
         paths:
           - backend:
               serviceName: {{ $serviceName }}
-              {{- if $tlsEnabled }}
-              servicePort: 443
-              {{- else }}
               servicePort: 80
-              {{- end }}
   {{- end -}}
   {{- if .Values.ui.ingress.tls }}
   tls:
